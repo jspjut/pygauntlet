@@ -1,0 +1,4 @@
+move:NEARESTPLAYER:CONTINUE5:release:1:
+move:WEST:CONTINUE5:release:2:
+move:SOUTH:CONTINUE5:release:3:
+move:EAST:CONTINUE5:release:0:
