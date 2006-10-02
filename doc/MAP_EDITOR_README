@@ -1,0 +1,91 @@
+The map editor is a tool that can be used to both create new maps, or modify existing
+maps for use in the cloned version of Gauntlet designed as a software engineering
+project by Team Penetrode. 
+
+REQUIREMENTS
+1. Python interpreter
+2. PYgame libraries
+3. Some free time to make cool looking maps
+
+
+INTERFACE
+The interface for the map editor at this point is rather simplistic and arcane, but provides
+a much better interface than writing the text map files by itself. To run the tool,
+type ./mapeditor.py at the terminal along with an optional .map file if you wish to edit
+an exisiting map. Possible uses:
+
+1.  ./mapeditor.py           (No arguements, Unix machine)
+2.  mapeditor.py             (No arguments, Windows machine)
+3. ./mapeditor.py level3.map   (One argument, Unix machine)
+	Note:  This would load level3.map so we could then choose to edit it
+
+If no arguments are specified, a command will prompt the user for a map size. At this
+point, the editor only supports making maps of size 50, and will resort to a default
+size of 25 if anything out of bounds is given as input. The editor also only supports
+square maps.
+
+USE
+Once the screen window pops up, there will be a rectangular map shown. The user can navigate
+each tile using the up and down arrows. The only indication of where the user actually is at
+is through the terminal window, which will give the user's position. By using the selected 
+keyboard buttons described below, the user can build a map to his liking. At this point, 
+the tool assumes the user knows what he is doing in terms of placing characters, monsters,
+walls, exits, etc, and performs no error checking to make sure for instance that there is only
+one player one on the screen. The tool was made for quick generation of maps that was easy
+to use, and no error checking was completed. Future versions will add this, as well as 
+highlighting of the squares. See use commands at the bottom of the README
+
+COMPLETION
+Once the map is to the user's liking, he/she will want to press the X on the window. The terminal
+window will ask the user whether or not they want to save their new level. If they do, and the
+level was created from scratch, the level will get saved to newlevel.map.  If the user was editing
+a level, the level being edited will get overwritten with the new map.
+
+COMMANDS  
+By pressing one of these buttons, a certain character, enemy, generator, etc. will
+get placed on the map. Several tokens ( including the monster and generator) have different
+types of themselves that can be placed on the screen, and these can be cycled through by 
+repeatedly pressing their respective button until the user finds the one he/she wants.
+
+W = WALL
+D = DOOR
+T = TILE (floor tile)
+E = EXIT
+
+K = KEY
+P = POTION
+G = GOLD
+F = FOOD
+
+1 = PLAYER1
+2 = PLAYER2
+3 = PLAYER3
+4 = PLAYER4
+
+(Note: these can be pressed more than once to access different types)
+N = GENERATOR
+M = MONSTER
+
+PLAYING THE MAP
+The gauntlet.py script accepts various ways of choosing which levels
+to play. After the preset levels have been completed, random levels
+are chosen. To play a user generated map, the script can be run as
+follows:
+
+python gauntlet.py mapfilename.map
+
+If a series of maps has been created and should be loaded in
+succession, a file with a list of maps should be created. The standard
+suffix for this file is .cfg. A sample map list, mymaps.cfg, is as follows:
+
+myMap1.map
+johnny.map
+foo.map
+
+The gauntlet.py script should then be run as follows:
+
+python gauntlet.py mymaps.cfg
+
+This command with the above map list will look for myMap1.map first,
+johnny.map second, and foo.map third. If any of these maps are not
+found, a random map will be loaded.

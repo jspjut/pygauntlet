@@ -1,0 +1,23 @@
+The PyGauntlet project is currently being developed and maintained by
+Josef Spjut. The following are lists of contributors sorted roughly by
+their contributions.
+
+Contributors:
+Julien Rossi
+The Wesnoth Team (www.wesnoth.org)
+
+This is the original message included with every file in the project
+listing the original authors with their roles:
+/----------------------------------------------------------------------------\
+|  Filename   :  game.py                                                     |
+|----------------------------------------------------------------------------|
+|  Members    :  Scott Sirowy     <ssirowy>    Administrative lead           |
+|                Jason Richey     <jrichey>    Technical lead                |
+|                Robert Militante <rmilitante>                               |
+|                Eric Haase       <ehaase>                                   |
+|                Josef Spjut      <sjosef>                                   |
+|                Levin Dean       <ldean>                                    |
+|                Kendon Black     <kblack>                                   |
+|  Class      :  CS180                                                       |
+|  Professor  :  Peter Froehlich                                             |
+\----------------------------------------------------------------------------/

@@ -1,0 +1,51 @@
+In order to make a skin, certain files are necessary inside the skin
+directory. All of the images are expected to be found in the directory
+for the specific skin which should be placed in the skin directory
+inside of data. The way it works is that the game looks for certain
+files ending in ".cfg" and reads the names of the images from
+there. If any of the image files mentioned in a ".cfg" file is missing
+or spelled incorrectly, the game will do strange things. The hard
+coded required image ".cfg" files are the following:
+
+archer.cfg
+arrow.cfg
+axe.cfg
+death.cfg
+sword.cfg
+demon.cfg
+fireball.cfg
+generator.cfg
+ghost.cfg
+ghostgenbig.cfg
+grunt.cfg
+lobber.cfg
+sorce.cfg
+thief.cfg
+valkyrie.cfg
+warrior.cfg
+whiteghost.cfg
+wizard.cfg
+
+These characters do not necessarily have to have images that
+correspond to the name, but the name is still used in the character
+selection screen. 
+
+There are also some ".cfg" files that have names of songs which are
+expected to be in the sounds directory. There are also other
+miscellaneous ".cfg" files that are required. The non-image ".cfg"
+files that are required are as follows:
+
+atd.cfg
+mapList.cfg
+music.cfg
+
+The other file type required in a skin is ".stm" which is a state 
+machine file. The explanation of this file is found in 
+STATE_MACHINE_README (which does not exist yet). I'm not too sure how
+this works, but the ".stm" files that are present in the current skins
+are:
+
+firingghost.stm
+ghost.stm
+ghost2.stm
+projectile.stm

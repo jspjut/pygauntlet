@@ -1,0 +1,4 @@
+include *.py *README MANIFEST.in COPYING CREDITS
+recursive-include data *.png *.ogg *.wav *.cfg *.stm *.map
+recursive-include src *.py
+recursive-include doc *README

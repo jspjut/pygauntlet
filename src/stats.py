@@ -1,0 +1,105 @@
+#Copyright 2005-2006 the PyGauntlet Team (See CREDITS for more info)
+#http://code.google.com/p/pygauntlet/
+#
+#This file is part of PyGauntlet.
+#
+#PyGauntlet is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#Foobar is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License
+#along with Foobar; if not, write to the Free Software
+#Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+from config import *
+
+STRENGTH = {}
+DEFENSE = {}
+INTELLIGENCE = {}
+DEXTERITY = {}
+HEALTH = {}
+DEFAULT = -1
+
+#WARRIOR
+STRENGTH[WARRIOR] = 30
+DEFENSE[WARRIOR] = 40
+INTELLIGENCE[WARRIOR] = 2
+DEXTERITY[WARRIOR] = 20
+HEALTH[WARRIOR] = 50
+#WIZARD
+STRENGTH[WIZARD] = 20
+DEFENSE[WIZARD] = 20
+INTELLIGENCE[WIZARD] = 5
+DEXTERITY[WIZARD] = 26
+HEALTH[WIZARD] = 50
+#VALKYRIE
+STRENGTH[VALKYRIE] = 27
+DEFENSE[VALKYRIE] = 50
+INTELLIGENCE[VALKYRIE] = 4
+DEXTERITY[VALKYRIE] = 22
+HEALTH[VALKYRIE] = 50
+#ARCHER
+STRENGTH[ARCHER] = 23
+DEFENSE[ARCHER] = 30
+INTELLIGENCE[ARCHER] = 3
+DEXTERITY[ARCHER] = 30
+HEALTH[ARCHER] = 50
+
+
+#DEFAULT
+#This is temporary until we set the rest of the monsters
+STRENGTH[DEFAULT] = 20
+DEFENSE[DEFAULT] = 20
+INTELLIGENCE[DEFAULT] = 3
+DEXTERITY[DEFAULT] = 20
+HEALTH[DEFAULT] = 50
+
+#MONSTERS
+#GHOST
+STRENGTH[GHOST] = 15
+DEFENSE[GHOST] = 10
+INTELLIGENCE[GHOST] = 5
+DEXTERITY[GHOST] = 14
+HEALTH[GHOST] = 15
+#GRUNT
+STRENGTH[GRUNT] = 20
+DEFENSE[GRUNT] = 14
+INTELLIGENCE[GRUNT] = 2
+DEXTERITY[GRUNT] = 16
+HEALTH[GRUNT] = 25
+#DEMON
+STRENGTH[DEMON] = 19
+DEFENSE[DEMON] = 13
+INTELLIGENCE[DEMON] = 10
+DEXTERITY[DEMON] = 17
+HEALTH[DEMON] = 20
+#LOBBER
+STRENGTH[LOBBER] = 13
+DEFENSE[LOBBER] = 12
+INTELLIGENCE[LOBBER] = 12
+DEXTERITY[LOBBER] = 25
+HEALTH[LOBBER] = 10
+#SORCERER
+STRENGTH[SORCERER] = 16
+DEFENSE[SORCERER] = 13
+INTELLIGENCE[SORCERER] = 14
+DEXTERITY[SORCERER] = 17
+HEALTH[SORCERER] = 25
+#DEATH
+STRENGTH[DEATH] = 25
+DEFENSE[DEATH] = 100
+INTELLIGENCE[DEATH] = 10
+DEXTERITY[DEATH] = 15
+HEALTH[DEATH] = 50
+#THIEF
+STRENGTH[THIEF] = 25
+DEFENSE[THIEF] = 10
+INTELLIGENCE[THIEF] = 12
+DEXTERITY[THIEF] = 25
+HEALTH[THIEF] = 15
