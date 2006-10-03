@@ -18,8 +18,6 @@
 #Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 from config import *
-from socket import *
-import cPickle as marshal
 from weakref import WeakKeyDictionary
 import events
 from events import *
@@ -48,7 +46,6 @@ class EventManager:
     self.verbose = options.verbose
     self.nextClientID = 1
     self.role = role
-    self.checkingBuffers = False
     try:
       if options.netmaster:
         self.role=SERVER
@@ -76,107 +73,10 @@ class EventManager:
     addrList = []
     
     # Create socket and bind to address
-    self.listenUDPSock = socket(AF_INET,SOCK_DGRAM)
-    self.listenUDPSock.setblocking( False )
-    self.listenUDPSock.bind(addr)
 
     # register with the server if this is a client
     if self.role == CLIENT:
-      self.network_post(marshal.dumps({'eventid':REGISTERCLIENT}),
-                        self.serveraddr)
-
-  def checkBuffers(self):
-    if self.checkingBuffers:
-      return False
-    self.checkingBuffers = True
-    buf=1024
-    # Receive messages
-    try:
-      data,addr = self.listenUDPSock.recvfrom(buf)
-      #    if addr not in addrList:
-      #      addrList.append(addr)
-      if not data:
-        print "no data!"
-      else:
-        dictdata = marshal.loads(data)
-        if self.role == CLIENT:
-#          print "Client received message "
-          if dictdata['eventid'] == TICKEVENT:
-            event = events.TickEvent()
-            for listener in self.listeners.keys():
-              listener.notify(event)
-          elif dictdata['eventid'] == DISPLAYTICKEVENT:
-            event = events.DisplayTickEvent()
-            for listener in self.listeners.keys():
-              listener.notify(event)
-          elif dictdata['eventid'] == STARTGAMEEVENT:
-            event = self.startevent
-            for listener in self.listeners.keys():
-              listener.notify(event)
-          elif dictdata['eventid'] == GAMEOVEREVENT:
-            event = events.GameOverEvent()
-            for listener in self.listeners.keys():
-              listener.notify(event)
-          elif dictdata['eventid'] == CHARACTERMOVEPRESS:
-            event = events.CharacterMovePress(dictdata['charID'],
-                                              dictdata['dir'])
-            for listener in self.listeners.keys():
-              listener.notify(event)
-            
-          elif dictdata['eventid'] == ADDPLAYERCHARACTER:
-            print "network receive client addplayer"
-            event = events.AddPlayerCharacter(dictdata['pos'],
-                                              dictdata['classType'],
-                                              dictdata['ID'])
-            for listener in self.listeners.keys():
-              listener.notify(event)
-          elif dictdata['eventid'] == ADDPLAYERCONTROLLER:
-            event = events.AddPlayerController(dictdata['ID'])
-            for listener in self.listeners.keys():
-              listener.notify(event)
-            
-            
-          elif dictdata['eventid'] == CHARACTERMOVERELEASE:
-            event = events.CharacterMoveRelease(dictdata['charID'],
-                                                dictdata['dir'])
-            for listener in self.listeners.keys():
-              listener.notify(event)
-          elif dictdata['eventid'] == CHARACTERATTACKPRESS:
-            event = events.CharacterAttackPress(dictdata['charID'])
-            for listener in self.listeners.keys():
-              listener.notify(event)
-          elif dictdata['eventid'] == CHARACTERATTACKRELEASE:
-            event = events.CharacterAttackRelease(dictdata['charID'])
-            for listener in self.listeners.keys():
-              listener.notify(event)
-          elif dictdata['eventid'] == CHARACTERMAGICPRESS:
-            event = events.CharacterMagicPress(dictdata['charID'])
-            for listener in self.listeners.keys():
-              listener.notify(event)
-          elif dictdata['eventid'] == CHARACTERMAGICRELEASE:
-            event = events.CharacterMagicRelease(dictdata['charID'])
-            for listener in self.listeners.keys():
-              listener.notify(event)
-          elif dictdata['eventid'] == CHARACTERMAGICATTACK:
-            event = events.CharacterMagicAttack(dictdata['charID'])
-            for listener in self.listeners.keys():
-              listener.notify(event)
-
-        elif self.role == SERVER:
-#          print "Server received message "
-          if dictdata['eventid'] == REGISTERCLIENT:
-            self.registerClient(addr[0])
-          else:
-            if dictdata['eventid'] == ADDPLAYERCHARACTER:
-              print "network receive server addplayer"
-            for key in self.clients.keys():
-              print "posting to "+str(self.clients[key])+": "+str(data) 
-              self.network_post( data, self.clients[key] )
-      self.checkingBuffers = False
-      return True
-    except error:
-      self.checkingBuffers = False
-      return False
+      pass
 
   def stopListening(self):
     # Close socket
@@ -211,14 +111,6 @@ class EventManager:
     if listener in self.listeners.keys():
       del self.listeners[listener]
 
-  def registerClient ( self, ip ):
-    self.clients[self.nextClientID] = ip
-    self.nextClientID += 1
-
-  def unregisterClient ( self, client ):
-    if client in self.clients.keys():
-      del self.clients[clients]
-
 
   ##\brief post an event
   ##
@@ -242,121 +134,9 @@ class EventManager:
       for listener in self.listeners.keys():
         listener.notify(event)
     if self.role == SERVER:
-      #post events that are meant for the network
-      if isinstance( event, events.TickEvent ):
-        for key in self.clients.keys():
-          self.network_post(marshal.dumps({'eventid':TICKEVENT}),
-                       self.clients[key])
-      elif isinstance( event, events.DisplayTickEvent ):
-        for key in self.clients.keys():
-          self.network_post(marshal.dumps({'eventid':DISPLAYTICKEVENT}),
-                       self.clients[key])
-      elif isinstance( event, events.GameOverEvent ):
-        for key in self.clients.keys():
-          self.network_post(marshal.dumps({'eventid':GAMEOVEREVENT}),
-                       self.clients[key])
-      elif isinstance( event, events.AddPlayerCharacter ):
-        print "network post server addplayer"
-        for key in self.clients.keys():
-          self.network_post(marshal.dumps({'eventid':ADDPLAYERCHARACTER,
-                                           'pos':event.position,
-                                           'classType':event.classType,
-                                           'ID':event.ID}),
-                       self.clients[key])
-      elif isinstance( event, events.AddPlayerController ):
-        for key in self.clients.keys():
-          self.network_post(marshal.dumps({'eventid':ADDPLAYERCONTROLLER,
-                                           'ID':event.ID}),
-                       self.clients[key])
-      elif isinstance( event, events.StartGameEvent ):
-        for key in self.clients.keys():
-          self.network_post(marshal.dumps({'eventid':STARTGAMEEVENT}),
-                            self.clients[key])
-
-      #even if it's meant for the network, it gets posted locally
-      for listener in self.listeners.keys():
-        listener.notify(event)
-    
-      while self.checkBuffers():
-        pass
-    if self.role == CLIENT:
-      if isinstance( event,events.CharacterMovePress ):
-        self.network_post(marshal.dumps({'eventid':CHARACTERMOVEPRESS,
-                                    'charID':event.characterID,
-                                    'dir':event.direction}),
-                     self.serveraddr)
-      elif isinstance( event, events.AddPlayerCharacter ):
-        print "network post client addplayer"
-        self.network_post(marshal.dumps({'eventid':ADDPLAYERCHARACTER,
-                                         'pos':event.position,
-                                         'classType':event.classType,
-                                         'ID':event.ID}),
-                          self.serveraddr)
-      elif isinstance( event, events.AddPlayerController ):
-        self.network_post(marshal.dumps({'eventid':ADDPLAYERCONTROLLER,
-                                           'ID':event.ID}),
-                          self.serveraddr)
-      elif isinstance( event, events.StartGameEvent ):
-        self.startevent = event
-      elif isinstance( event,events.CharacterMoveRelease ):
-        self.network_post(marshal.dumps({'eventid':CHARACTERMOVERELEASE,
-                                    'charID':event.characterID,
-                                    'dir':event.direction}),
-                     self.serveraddr)
-          
-      elif isinstance( event,events.CharacterAttackPress ):
-        self.network_post(marshal.dumps({'eventid':CHARACTERATTACKPRESS,
-                                    'charID':event.characterID}),
-                     self.serveraddr)
-            
-      elif isinstance( event,events.CharacterAttackRelease ):
-        self.network_post(marshal.dumps({'eventid':CHARACTERATTACKRELEASE,
-                                    'charID':event.characterID}),
-                     self.serveraddr)
-              
-      elif isinstance( event,events.CharacterMagicPress ):
-        self.network_post(marshal.dumps({'eventid':CHARACTERMAGICPRESS,
-                                    'charID':event.characterID}),
-                     self.serveraddr)
-                
-      elif isinstance( event,events.CharacterMagicRelease ):
-        self.network_post(marshal.dumps({'eventid':CHARACTERMAGICRELEASE,
-                                    'charID':event.characterID}),
-                     self.serveraddr)
-      elif isinstance( event,events.CharacterMagicAttack ):
-        self.network_post(marshal.dumps({'eventid':CHARACTERMAGICATTACK,
-                                    'charID':event.characterID}),
-                     self.serveraddr)
-      else:
-        #initially, you think these should get posted locally, too.
-        #However, the server re-posts these to the network, so...
-        for listener in self.listeners.keys():
-          listener.notify(event)
-
-#quitevent should be handled (convert to character die or something like that)
-#        events.QuitEvent ( Event ):
-
-        while self.checkBuffers():
-          pass
-  def network_post(self,postdata,address):
-    host = address
-    if self.role == SERVER:
-      port = 21568
-    else:
-      port = 21567
-    buf = 1024
-    addr = (host,port)
-
-    # Create socket
-    UDPSock = socket(AF_INET,SOCK_DGRAM)
-    
-    # Send messages
-#    postdata = "test write"
-    if(UDPSock.sendto(postdata,addr)):
       pass
-#      print "Sending message '",postdata,"' to address"+str(postdata)+".....<done>"
-#    data,addr = UDPSock.recvfrom(buf)
-#    print data
-    
-    # Close socket
-    UDPSock.close()
+      #post events that are meant for the network
+
+  def network_post(self,postdata,address):
+    pass
+  
