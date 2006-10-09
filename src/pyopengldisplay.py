@@ -10,13 +10,13 @@
 #the Free Software Foundation; either version 2 of the License, or
 #(at your option) any later version.
 #
-#Foobar is distributed in the hope that it will be useful,
+#PyGauntlet is distributed in the hope that it will be useful,
 #but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #
 #You should have received a copy of the GNU General Public License
-#along with Foobar; if not, write to the Free Software
+#along with PyGauntlet; if not, write to the Free Software
 #Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
@@ -50,6 +50,7 @@ import exit
 import item
 import barrier
 import events
+import textdisplay
 from config import *
 
 # These rotation variables are only used when this script is run
@@ -83,15 +84,17 @@ class PygameDisplay( display.Display ):
       displayFlags = OPENGL|DOUBLEBUF
       display.Display.__init__(self, eventManager, options, displayFlags)
 
+    # This is global so that functions in this file can see it
     global verbose
-    verbose = self.options.verbose
-      
+    if options != None:
+      verbose = self.options.verbose
+
     # Set up the initial view point
     # The x and y values are set by the character locations
     # The z value is how high above the floor the camera is
     self.z = 25.0
-    self.x = 0.0
-    self.y = 0.0
+    #self.x = 0.0
+    #self.y = 0.0
 
     # This section needs to be replaced with data from the actual level loaded.
     # This should also probably happen at the start game event.
@@ -207,7 +210,7 @@ class PygameDisplay( display.Display ):
       b.move()
       if self.distance(b) < CLIP_DISTANCE:
         b.draw()
-      
+
     # This only does anything when this script is run for testing
     xrot += xspeed
     yrot += yspeed

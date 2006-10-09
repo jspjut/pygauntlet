@@ -8,13 +8,13 @@
 #the Free Software Foundation; either version 2 of the License, or
 #(at your option) any later version.
 #
-#Foobar is distributed in the hope that it will be useful,
+#PyGauntlet is distributed in the hope that it will be useful,
 #but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #
 #You should have received a copy of the GNU General Public License
-#along with Foobar; if not, write to the Free Software
+#along with PyGauntlet; if not, write to the Free Software
 #Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import pygame
@@ -41,7 +41,7 @@ class TextDisplay ( pygame.sprite.Sprite ):
     self.potionStr = [0, 0, 0, 0]
     
     # If you want the icon to display on the side, set this to true
-    icon = True
+    icon = False
     if not icon:
       fontsize = 50
       grey = (100, 100, 100)
@@ -142,4 +142,8 @@ class TextDisplay ( pygame.sprite.Sprite ):
       self.dirty = False
       # Move the overall rect back to the right of the screen
       self.rect.topleft = (self.x, 0)
-      self.display.dirty = True
+      try:
+        self.display.dirty = True
+      except:
+        pass
+      
