@@ -266,6 +266,9 @@ class PygameDisplay( display.Display ):
     elif isinstance( event, events.AddProjectile ):
       self.mobiles.append(Mobile(event.proj))
     elif isinstance( event, events.DisplayTickEvent ):
+      # Animate items
+      for i in self.items:
+        i.animate()
       self.draw()
       pygame.display.flip()
 
@@ -447,6 +450,8 @@ class Immobile (Block):
   def __init__(self, immobile):
     self.loc = (immobile.rect.centerx/16.0,immobile.rect.centery/16.0)
     self.immobile = immobile
+    self.animz = 0.0
+    self.maxz = 1.0
     Block.__init__(self)
 
   def loadTexture(self):
@@ -459,6 +464,9 @@ class Immobile (Block):
         fullname = os.path.join('data','skins',skin.SKIN,'foodplate.png')
       elif self.immobile.type == POTION:
         fullname = os.path.join('data','skins',skin.SKIN,'bluepotion.png')
+        #turn on animation for potions
+        self.animz = 0.03
+        self.maxz = 0.5
       elif self.immobile.type == GOLD:
         fullname = os.path.join('data','skins',skin.SKIN,'treasure.png')
     elif isinstance(self.immobile, barrier.Door):
@@ -473,6 +481,12 @@ class Immobile (Block):
       Block.textures[fullname] = loadTexture(fullname)
       self.texture = Block.textures[fullname]
 
+  def animate(self):
+    #this animates by changing the 'z' value for drawing.
+    self.locz = self.locz + self.animz
+    if self.locz >= self.maxz or self.locz <= 0:
+      self.animz = -self.animz
+      self.locz = self.locz + self.animz
 
 class Mobile (Block):
   def __init__(self, mobile):
