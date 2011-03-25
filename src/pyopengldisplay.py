@@ -266,9 +266,9 @@ class PygameDisplay( display.Display ):
     elif isinstance( event, events.AddProjectile ):
       self.mobiles.append(Mobile(event.proj))
     elif isinstance( event, events.DisplayTickEvent ):
-      # Animate items
+      #update items
       for i in self.items:
-        i.animate()
+        i.update_loc()
       self.draw()
       pygame.display.flip()
 
@@ -276,6 +276,9 @@ class Block:
   textures = {}
   def __init__(self, texture = None):
     self.locz = 0
+    self.float = False
+    self.animz = 0.03
+    self.maxz = 0.5
     #self.loc should already be set
     self.update_loc()
     if texture == None:
@@ -288,6 +291,12 @@ class Block:
     self.loc0p = self.loc[0]+1.0
     self.loc1m = -self.loc[1]-1.0
     self.loc1p = -self.loc[1]+1.0
+    #floating animation
+    if self.float:
+      self.locz = self.locz + self.animz
+      if self.locz >= self.maxz or self.locz <= 0:
+        self.animz = -self.animz
+        self.locz = self.locz + self.animz
 
   def loadTexture(self):
     self.texture = None
@@ -409,6 +418,7 @@ class Floor (Block):
 
   # This function is rewriten to make the floor the right size
   def update_loc(self):
+    # Should reall be changed to be the size of the map
     self.loc0m = -1
     self.loc0p = self.loc[0]*2+1
     self.loc1m = -self.loc[1]*2-1
@@ -450,8 +460,6 @@ class Immobile (Block):
   def __init__(self, immobile):
     self.loc = (immobile.rect.centerx/16.0,immobile.rect.centery/16.0)
     self.immobile = immobile
-    self.animz = 0.0
-    self.maxz = 1.0
     Block.__init__(self)
 
   def loadTexture(self):
@@ -464,9 +472,7 @@ class Immobile (Block):
         fullname = os.path.join('data','skins',skin.SKIN,'foodplate.png')
       elif self.immobile.type == POTION:
         fullname = os.path.join('data','skins',skin.SKIN,'bluepotion.png')
-        #turn on animation for potions
-        self.animz = 0.03
-        self.maxz = 0.5
+        self.float = True
       elif self.immobile.type == GOLD:
         fullname = os.path.join('data','skins',skin.SKIN,'treasure.png')
     elif isinstance(self.immobile, barrier.Door):
@@ -480,13 +486,6 @@ class Immobile (Block):
     except:
       Block.textures[fullname] = loadTexture(fullname)
       self.texture = Block.textures[fullname]
-
-  def animate(self):
-    #this animates by changing the 'z' value for drawing.
-    self.locz = self.locz + self.animz
-    if self.locz >= self.maxz or self.locz <= 0:
-      self.animz = -self.animz
-      self.locz = self.locz + self.animz
 
 class Mobile (Block):
   def __init__(self, mobile):

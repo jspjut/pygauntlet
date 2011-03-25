@@ -233,6 +233,9 @@ def loadConfig ( self, characterClass, loadFunc = loadPng ):
   # When adding animation to the images, we should look here.
   try:
     skinlines = skinfile.readlines()
+    if skinlines[0].strip() == "float":
+      self.float = True
+      skinlines = skinlines[1:]
     if len(skinlines) == 8:
       for i in xrange(8):
         self.imageList[i+1] = ImageChooser(os.path.join(fullpath,skinlines[i].strip()), loadFunc)
