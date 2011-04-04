@@ -472,9 +472,10 @@ class Immobile (Block):
         fullname = os.path.join('data','skins',skin.SKIN,'foodplate.png')
       elif self.immobile.type == POTION:
         fullname = os.path.join('data','skins',skin.SKIN,'bluepotion.png')
-        self.float = True
       elif self.immobile.type == GOLD:
         fullname = os.path.join('data','skins',skin.SKIN,'treasure.png')
+      # Items float
+      self.float = True
     elif isinstance(self.immobile, barrier.Door):
       fullname = os.path.join('data','skins',skin.SKIN,'door.png')
     else: #wall
