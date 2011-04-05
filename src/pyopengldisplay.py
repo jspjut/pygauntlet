@@ -191,7 +191,7 @@ class PygameDisplay( display.Display ):
 
   def drawText(self):
     # Get to normalized viewport
-    #jbs: should turn off lighting here
+    glDisable(GL_LIGHTING)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
     glOrtho(0, RESOLUTION[0], 0, RESOLUTION[1], 4, -4)
@@ -209,13 +209,13 @@ class PygameDisplay( display.Display ):
 
     # Now that we have a texture from the surface let's map it to a square
     glEnable(GL_CULL_FACE)
-    glColor4f(.25,.25,.25,0)
+    glColor4f(1,1,1,0)
 
     glBegin(GL_QUADS)
 
     glNormal3f(0.0, 0.0, 1.0)
     rect = self.text.rect
-    print rect.topright
+    # These labels are wrong, but who cares?
     glTexCoord2f(1.0, 1.0); glVertex3f(rect.right, rect.bottom,  -.50)	# Bottom Left Of The Texture and Quad
     glTexCoord2f(1.0, 0.0); glVertex3f(rect.right, rect.top   ,  -.50)	# Top Left Of The Texture and Quad
     glTexCoord2f(0.0, 0.0); glVertex3f(rect.left , rect.top   ,  -.50)	# Top Right Of The Texture and Quad
@@ -235,6 +235,7 @@ class PygameDisplay( display.Display ):
     glFrustum(-1.0, 1.0, -1.0*yratio, 1.0*yratio, 2, 80.0)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
+    glEnable(GL_LIGHTING)
 
   def draw(self):
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
