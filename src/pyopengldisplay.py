@@ -123,7 +123,15 @@ class PygameDisplay( display.Display ):
       print s
       print s[1]
       print self.x, self.y
+
+    # Setup the text display
+    textSize = (RESOLUTION[0]/4,RESOLUTION[1])
+    textLocationY = RESOLUTION[0]/4*3
+    self.text = textdisplay.TextDisplay( self, self.eventManager, \
+                                         textSize, textLocationY )
+    self.textTexture = glGenTextures(1)
     pass
+  
 
   def buildSprites( self, chars, immobiles, mobiles ):
     del(self.blocks)
@@ -151,6 +159,8 @@ class PygameDisplay( display.Display ):
     glViewport(0, 0, width, height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
+    self.width = width
+    self.height = height
     yratio = 1.0*height/width
     glFrustum(-1.0, 1.0, -1.0*yratio, 1.0*yratio, 2, 80.0)
 #    gluPerspective(45, 1.0*width/height, 0.1, 100.0)
@@ -178,6 +188,53 @@ class PygameDisplay( display.Display ):
     glEnable(GL_BLEND)
     glCullFace(GL_FRONT)
 
+
+  def drawText(self):
+    # Get to normalized viewport
+    #jbs: should turn off lighting here
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    glOrtho(0, RESOLUTION[0], 0, RESOLUTION[1], 4, -4)
+    glClear(GL_DEPTH_BUFFER_BIT)
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+
+    glBindTexture(GL_TEXTURE_2D, self.textTexture)
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR )
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR )
+    image = self.text.image.convert()
+    textureData = pygame.image.tostring(image, "RGB", 1)
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, image.get_width(), image.get_height(), 0,
+                  GL_RGB, GL_UNSIGNED_BYTE, textureData )
+
+    # Now that we have a texture from the surface let's map it to a square
+    glEnable(GL_CULL_FACE)
+    glColor4f(.25,.25,.25,0)
+
+    glBegin(GL_QUADS)
+
+    glNormal3f(0.0, 0.0, 1.0)
+    rect = self.text.rect
+    print rect.topright
+    glTexCoord2f(1.0, 1.0); glVertex3f(rect.right, rect.bottom,  -.50)	# Bottom Left Of The Texture and Quad
+    glTexCoord2f(1.0, 0.0); glVertex3f(rect.right, rect.top   ,  -.50)	# Top Left Of The Texture and Quad
+    glTexCoord2f(0.0, 0.0); glVertex3f(rect.left , rect.top   ,  -.50)	# Top Right Of The Texture and Quad
+    glTexCoord2f(0.0, 1.0); glVertex3f(rect.left , rect.bottom,  -.50)	# Bottom Right Of The Texture and Quad
+
+    glEnd();
+
+    glEnable(GL_DEPTH_TEST)
+    glDisable(GL_BLEND)
+    glDisable(GL_CULL_FACE)
+    glColor4f(1,1,1,1)
+
+    # Reset the projection mode for regular objects
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    yratio = 1.0*self.height/self.width
+    glFrustum(-1.0, 1.0, -1.0*yratio, 1.0*yratio, 2, 80.0)
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
 
   def draw(self):
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -270,6 +327,7 @@ class PygameDisplay( display.Display ):
       for i in self.items:
         i.update_loc()
       self.draw()
+      self.drawText()
       pygame.display.flip()
 
 class Block:
