@@ -31,6 +31,9 @@ import bdist_mpkg
 import py2app
 from setup_data import *
 
+import sys
+sys.path.append('src')
+
 # This is a list of things to include in the application plist
 # 
 plist = dict(
@@ -54,14 +57,14 @@ py2app_options = dict(
 setup(
     data_files=['./data'],
     app=[
-        dict(script="gauntlet.py", plist=plist),
+        dict(script="pygauntlet.py", plist=plist),
     ],
 #    app=['gauntlet.py'],
     options=dict(py2app=py2app_options,),
     name=NAME,
     version=VERSION,
     author='PyGauntlet Team',
-    author_email='http://groups.google.com/group/pygauntlet'
+    author_email='http://groups.google.com/group/pygauntlet',
     url='http://code.google.com/p/pygauntlet/',
     description='Python Gauntlet Game',
 )
