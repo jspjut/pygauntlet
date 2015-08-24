@@ -1,37 +1,37 @@
-=About Pygauntlet=
+#About Pygauntlet
 Pygauntlet is a project started at the UCR department of Computer Science for a class in software engineering. The project is currently maintained by Josef Spjut, but is not actively being worked on.
 
-=Mac Install Directions=
+#Mac Install Directions
 Assuming you have homebrew installed.
 
-  # Install pygame. [https://bitbucket.org/pygame/pygame/issue/82/homebrew-on-leopard-fails-to-install#comment-627494 source]
-  # Install pyopengl. [http://pyopengl.sourceforge.net/ source]
+  1. Install pygame. [source](https://bitbucket.org/pygame/pygame/issue/82/homebrew-on-leopard-fails-to-install#comment-627494)
+  2. Install pyopengl. [source](http://pyopengl.sourceforge.net/)
 
 How to install pygame in your path:
-{{{
+```
 brew install sdl sdl_image sdl_mixer sdl_ttf smpeg portmidi 
 sudo pip install hg+http://bitbucket.org/pygame/pygame
-}}}
+```
 How to install pygame in homebrew python install:
-{{{
+```
 brew install python
 brew install sdl sdl_image sdl_mixer sdl_ttf smpeg portmidi 
 /usr/local/share/python/pip install hg+http://bitbucket.org/pygame/pygame
-}}}
+```
 How to install pyopengl
-{{{
+```
 pip install PyOpenGL PyOpenGL_accelerate
-}}}
+```
 
-=Other OS=
+#Other OS
 Should work fine, but you are on your own until I find the time to update this...
 
-=Blog=
+#Blog
 There is an [http://pygauntlet.blogspot.com old blog] but it's basically dead.
 
 
 
-=OLD README BELOW=
+#OLD README BELOW
 
 README - version 0.7.9
 
